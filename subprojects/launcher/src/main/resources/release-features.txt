@@ -1,3 +1,0 @@
- - Toolchain support for Scala
- - More cache hits when Java source files have platform-specific line endings
- - More resilient remote HTTP build cache behavior
