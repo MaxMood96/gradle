@@ -17,6 +17,7 @@
 package org.gradle.api.problems.internal;
 
 import org.gradle.api.Action;
+import org.gradle.api.problems.Problem;
 import org.gradle.api.problems.ProblemSpec;
 import org.gradle.internal.exception.ExceptionAnalyser;
 import org.gradle.internal.operations.CurrentBuildOperationRef;
@@ -80,7 +81,7 @@ public class DefaultProblemReporter implements InternalProblemReporter {
     @Override
     public RuntimeException throwing(Throwable exception, Collection<? extends Problem> problems) {
         for (Problem problem : problems) {
-            report(problem.toBuilder(additionalDataBuilderFactory).withException(transform(exception)).build());
+            report(((InternalProblem) problem).toBuilder(additionalDataBuilderFactory).withException(transform(exception)).build());
         }
         if (exception instanceof RuntimeException) {
             return (RuntimeException) exception;
@@ -140,7 +141,7 @@ public class DefaultProblemReporter implements InternalProblemReporter {
     @Override
     public void report(Problem problem, OperationIdentifier id) {
         String taskPath = ProblemTaskPathTracker.getTaskIdentityPath();
-        problem = taskPath == null ? problem : problem.toBuilder(additionalDataBuilderFactory).taskPathLocation(taskPath).build();
+        problem = taskPath == null ? problem : ((InternalProblem) problem).toBuilder(additionalDataBuilderFactory).taskPathLocation(taskPath).build();
         Throwable exception = problem.getException();
         if (exception != null) {
             exceptionProblemRegistry.onProblem(transform(exception), problem);

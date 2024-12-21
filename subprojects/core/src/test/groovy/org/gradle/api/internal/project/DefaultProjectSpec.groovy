@@ -54,6 +54,7 @@ import org.gradle.internal.service.scopes.ServiceRegistryFactory
 import org.gradle.invocation.GradleLifecycleActionExecutor
 import org.gradle.model.internal.registry.ModelRegistry
 import org.gradle.plugin.software.internal.SoftwareFeatureApplicator
+import org.gradle.plugin.software.internal.SoftwareFeaturesDynamicObject
 import org.gradle.plugin.software.internal.SoftwareTypeRegistry
 import org.gradle.test.fixtures.file.TestNameTestDirectoryProvider
 import org.gradle.util.Path
@@ -242,6 +243,7 @@ class DefaultProjectSpec extends Specification {
         def objectFactory = Stub(ObjectFactory) {
             fileCollection() >> TestFiles.fileCollectionFactory().configurableFiles()
             property(Object) >> propertyFactory.property(Object)
+            newInstance(SoftwareFeaturesDynamicObject, _) >> Stub(SoftwareFeaturesDynamicObject)
         }
 
         def serviceRegistry = new DefaultServiceRegistry()
@@ -279,7 +281,16 @@ class DefaultProjectSpec extends Specification {
             @Provides
             DefaultProjectLayout createProjectLayout(FileResolver fileResolver, FileCollectionFactory fileCollectionFactory) {
                 def filePropertyFactory = new DefaultFilePropertyFactory(PropertyHost.NO_OP, fileResolver, fileCollectionFactory)
-                return new DefaultProjectLayout(fileResolver.resolve("."), fileResolver, DefaultTaskDependencyFactory.withNoAssociatedProject(), PatternSets.getNonCachingPatternSetFactory(), PropertyHost.NO_OP, fileCollectionFactory, filePropertyFactory, filePropertyFactory)
+                return new DefaultProjectLayout(
+                    fileResolver.resolve("."),
+                    fileResolver.resolve("."),
+                    fileResolver,
+                    DefaultTaskDependencyFactory.withNoAssociatedProject(),
+                    PatternSets.getNonCachingPatternSetFactory(),
+                    PropertyHost.NO_OP,
+                    fileCollectionFactory,
+                    filePropertyFactory,
+                    filePropertyFactory)
             }
         })
 
@@ -301,7 +312,7 @@ class DefaultProjectSpec extends Specification {
         }
 
         def scriptResolution = Stub(ProjectScopedScriptResolution) {
-            resolveScriptsForProject(_, _, _, _) >> { identityPath, buildPath, projectPath, action -> action.get() }
+            resolveScriptsForProject(_, _) >> { project, action -> action.get() }
         }
 
         def instantiator = TestUtil.instantiatorFactory().decorateLenient(serviceRegistry)

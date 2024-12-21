@@ -17,8 +17,8 @@
 package org.gradle.internal.deprecation;
 
 import com.google.common.base.Joiner;
-import org.gradle.api.problems.internal.DocLink;
-import org.gradle.api.problems.internal.Problem;
+import org.gradle.api.problems.DocLink;
+import org.gradle.api.problems.Problem;
 import org.gradle.util.GradleVersion;
 
 import javax.annotation.CheckReturnValue;
@@ -102,6 +102,14 @@ public class DeprecationMessageBuilder<T extends DeprecationMessageBuilder<T>> {
      */
     public WithDeprecationTimeline willBecomeAnErrorInGradle9() {
         this.deprecationTimeline = DeprecationTimeline.willBecomeAnErrorInVersion(GRADLE9);
+        return new WithDeprecationTimeline(this);
+    }
+
+    /**
+     * Output: This will fail with an error in Gradle 10.0.
+     */
+    public WithDeprecationTimeline willBecomeAnErrorInGradle10() {
+        this.deprecationTimeline = DeprecationTimeline.willBecomeAnErrorInVersion(GRADLE10);
         return new WithDeprecationTimeline(this);
     }
 

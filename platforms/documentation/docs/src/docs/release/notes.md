@@ -2,7 +2,7 @@ The Gradle team is excited to announce Gradle @version@.
 
 This release features [1](), [2](), ... [n](), and more.
 
-<!-- 
+<!--
 Include only their name, impactful features should be called out separately below.
  [Some person](https://github.com/some-person)
 
@@ -21,9 +21,27 @@ Switch your build to use Gradle @version@ by updating the [Wrapper](userguide/gr
 
 See the [Gradle 8.x upgrade guide](userguide/upgrading_version_8.html#changes_@baseVersion@) to learn about deprecations, breaking changes, and other considerations when upgrading to Gradle @version@.
 
-For Java, Groovy, Kotlin, and Android compatibility, see the [full compatibility notes](userguide/compatibility.html).   
+For Java, Groovy, Kotlin, and Android compatibility, see the [full compatibility notes](userguide/compatibility.html).
 
 ## New features and usability improvements
+
+### Test reporting improvements
+
+#### New test report support for Custom Test Tasks
+
+It's new and improved!
+
+It allows for infinite nesting of test groups!
+
+It renders metadata!
+
+TODO: JVM Team should finish this placeholder
+
+### Error and warning reporting improvements
+
+#### Deprecation warnings full stack trace flag corrected
+
+The instructions printed under a deprecation warning now correctly indicate how to enable full stack traces for deprecation warnings.
 
 <!-- Do not add breaking changes or deprecations here! Add them to the upgrade guide instead. -->
 
@@ -57,7 +75,13 @@ Example:
 ADD RELEASE FEATURES BELOW
 vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv -->
 
+<a name="project-layout"></a>
+### Project Layout improvement
 
+The [`ProjectLayout`](org/gradle/api/file/ProjectLayout.html) class is used to access various directories and files within a project. 
+In this version of Gradle it gets the ability to also access the settings directory of the build (where the settings file is located).
+While this is a non-project specific location, there are uses cases where projects need to be aware of it and resolve file paths relative to it.
+See [`ProjectLayout.getSettingsDirectory()`](org/gradle/api/file/ProjectLayout.html#getSettingsDirectory()).
 
 <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ADD RELEASE FEATURES ABOVE
